@@ -1,0 +1,52 @@
+using System;
+using System.Linq;
+
+namespace Recount
+{
+    class Program
+    {
+        static void Main()
+        {
+            //A sample list of votes to be used for this problem:
+            string[] votes = { "Alex Brown", "Nate Smith", "Deborah Wilson", 
+                "Deborah Wilson", "Nate Smith", "Brenna Slezak", "Sumair Bakshi", 
+                "Allen Cao", "Michael Marinelli", "Joe Biden", "***" };
+
+            //This variable finds the most frequent name in the above string by taking a count
+            //of the names, placing them in descending order, and choosing the name at the 
+            //top of the list (the name that is most frequent in the list of votes)
+            var highestVoted = votes.GroupBy(v => v)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .FirstOrDefault();
+
+            //This variable tracks the amount of votes the highest-voted candidate receives by
+            //using the same process as the highestVoted variable
+            var highestVotedCount = votes.GroupBy(v => v)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Count())
+                .FirstOrDefault();
+
+            //This variable tracks the amount of votes the second-highest-voted candidate receives
+            //using the same process; for use when there is a tie in top votes
+            var highestVotedCount2 = votes.GroupBy(v => v)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Count())
+                .Skip(1).First();
+
+
+            if (highestVotedCount != highestVotedCount2)
+            {
+                //If the top two candidates do not have the exact same number of votes,
+                //display the top candidate
+                Console.WriteLine(highestVoted);
+            }
+            else
+            {
+                //Else if the top two candidates DO have the exact same amount of votes,
+                //display "Runoff!"
+                Console.WriteLine("Runoff!");
+            }
+        }
+    }
+}
